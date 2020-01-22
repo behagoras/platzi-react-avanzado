@@ -29,7 +29,6 @@
       "import"
     ],
     "rules": {
-      "semi-style": ["error", "last"],
       "react/jsx-filename-extension": 0,
       "react/destructuring-assignment": 0,
       "array-bracket-spacing": 2,
