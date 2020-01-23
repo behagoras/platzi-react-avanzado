@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import Category from './Category.jsx'
 
@@ -9,7 +9,7 @@ const List = styled.ul`
   display: flex;
   overflow: scroll;
   width: 100%;
-  &.fixed {
+  ${props => props.fixed && css`
     ${positionDown()};
     position: fixed;
     background:#fff;
@@ -22,36 +22,50 @@ const List = styled.ul`
     max-width:400px;
     padding:5px;
     transform:scale(0.6);
-    z-index:1;
-  }
+    z-index:1; 
+  `}
 `
 
 const Item = styled.li`
   padding: 0 8px;
 `
 
-const ListOfCategories = () => {
+function useCategoriesData () {
+  const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState([])
+
+  useEffect(() => {
+    setLoading(true)
+    window.fetch('https://petgram-server.behagoras.now.sh/categories')
+      .then(res => res.json())
+      .then(response => {
+        setCategories(response)
+        setLoading(false)
+      })
+  }, [])
+  return { categories, loading }
+}
+
+const ListOfCategories = () => {
   const [showFixed, setShowFixed] = useState(false)
+  const { categories, loading } = useCategoriesData()
 
   const renderList = (fixed) => (
-    <List className={fixed ? 'fixed' : ''}>
+    <List fixed={fixed}>
       {
-        categories.map(category => {
-          return (
-            <Item key={category.id}>
-              {<Category {...category} />}
-            </Item>
-          )
-        })
+
+        loading ? <Item key='loading'><Category emoji='loading...' /></Item>
+          : categories.map(category => {
+            return (
+              <Item key={category.id}>
+                {<Category {...category} />}
+              </Item>
+            )
+          })
       }
     </List>
   )
-  useEffect(() => {
-    window.fetch('https://petgram-server.behagoras.now.sh/categories')
-      .then(res => res.json())
-      .then(response => setCategories(response))
-  }, [])
+
   useEffect(() => {
     const onScroll = e => {
       const newShowFixed = window.scrollY > 200
@@ -60,6 +74,7 @@ const ListOfCategories = () => {
     document.addEventListener('scroll', onScroll)
     return () => document.removeEventListener('scroll', onScroll)
   }, [showFixed])
+
   return (
     <>
       {renderList()}

@@ -11,7 +11,7 @@ const ListOfPhotoCards = () => {
       [1, 2, 3, 4, 5, 6].map((id) => {
         return (
           <Item>
-            <PhotoCard />
+            <PhotoCard id={id} />
           </Item>
         )
       })
