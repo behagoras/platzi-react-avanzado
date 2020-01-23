@@ -11,7 +11,7 @@ const App = () => {
       <GlobalStyles />
       <Logo />
       <ListOfCategories />
-      <ListOfPhotoCards />
+      <ListOfPhotoCards categoryId={2} />
     </>
   )
 }
