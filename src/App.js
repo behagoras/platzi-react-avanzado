@@ -1,10 +1,11 @@
 import React from 'react'
+import Router from '@reach/router'
 
 import GlobalStyles from './styles/GlobalStyles'
-import ListOfCategories from './Components/Categories/ListOfCategories.jsx'
-import ListOfPhotoCards from './container/ListOfPhotoCards.jsx'
+
 import Logo from './Components/Logo.jsx'
 import PhotoCardWithQuery from './container/PhotoCardWithQuery.jsx'
+import Home from './pages/Home.jsx'
 
 const App = () => {
   const urlParams = new window.URLSearchParams(window.location.search)
@@ -16,10 +17,8 @@ const App = () => {
       {
         detailId
           ? <PhotoCardWithQuery id={detailId} />
-          : <>
-            <ListOfCategories />
-            <ListOfPhotoCards categoryId={2} />
-          </>
+          : <Home />
+              
       }
     </>
   )
